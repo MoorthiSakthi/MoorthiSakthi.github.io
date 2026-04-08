@@ -1,15 +1,28 @@
 body {
-    background-color: black;
-    color: white;
-    font-family: monospace;
-    padding: 20px;
+  margin: 0;
+  background: black;
+  color: #00ff00;
+  font-family: monospace;
 }
 
 .terminal {
-    max-width: 800px;
-    margin: auto;
+  padding: 20px;
+  height: 100vh;
 }
 
-.green {
-    color: #00ff00;
+.input-line {
+  display: flex;
+}
+
+.prompt {
+  margin-right: 10px;
+}
+
+input {
+  background: black;
+  border: none;
+  color: #00ff00;
+  outline: none;
+  width: 100%;
+  font-family: monospace;
 }
