@@ -14,82 +14,203 @@
       color: #d4d4d4;
       padding: 2rem 2.5rem;
       min-height: 100vh;
-      line-height: 1.7;
+      line-height: 1.8;
     }
 
-    .prompt {
-      color: #00ff41;
-    }
+    .prompt { color: #00ff41; }
 
-    .cmd {
-      color: #d4d4d4;
-    }
-
-    .text {
-      color: #d4d4d4;
-      display: block;
-    }
-
-    .blank {
-      display: block;
-      height: 0.6rem;
-    }
-
-    a.link {
+    .link {
       color: #00bfff;
       text-decoration: none;
-      cursor: pointer;
     }
+    .link:hover { text-decoration: underline; }
 
-    a.link:hover {
-      text-decoration: underline;
-    }
-
-    .cursor {
-      display: inline-block;
+    #cursor {
+      display: none;
       width: 9px;
-      height: 1.1em;
+      height: 1em;
       background: #d4d4d4;
       vertical-align: middle;
+      margin-left: 2px;
       animation: blink 1s step-end infinite;
-      margin-left: 1px;
     }
+    #cursor.show { display: inline-block; }
 
-    @keyframes blink {
-      50% { opacity: 0; }
-    }
+    @keyframes blink { 50% { opacity: 0; } }
   </style>
 </head>
 <body>
 
-<span class="prompt">root@MoorthiSakthi:~$ </span><span class="cmd">cd Portfolio</span><br>
-<span class="prompt">root@MoorthiSakthi:~$ </span><span class="cmd">cat about.txt</span><br>
-<span class="blank"></span>
-<span class="text">I'm Moorthi , I did my Bachelor's Degree in Bachelor of Science in Chemistry at</span>
-<span class="text">Bharathiyar University (Tiruppur , Tamilnadu , INDIA )</span>
-<span class="blank"></span>
-<span class="text">I'm currently pursuing my master degree in Master of Computer Applications at SRM</span>
-<span class="text">Institute of Science and Technology ( Chennai , Tamilnadu , INDIA )</span>
-<span class="blank"></span>
-<span class="text">Network Engineer with 5 years of experience in routing protocols, switching, and LAN technologies,</span>
-<span class="text">dedicated to designing and optimizing secure, scalable networks to drive operational efficiency</span>
-<span class="text">and support business goals.</span>
-<span class="blank"></span>
-<span class="text">Here's my <a class="link" href="#">Resume</a>, if you wanna Hire me.</span>
-<span class="blank"></span>
-<span class="prompt">root@MoorthiSakthi:~$ </span><span class="cmd">cat contact.txt</span><br>
-<span class="blank"></span>
-<span class="text">Feel free to reach me at <a class="link" href="mailto:mmoorthi304@gmail.com">mmoorthi304@gmail.com</a></span>
-<span class="blank"></span>
-<span class="text">My other social media handles include</span>
-<span class="text"># <a class="link" href="https://linkedin.com/in/yourprofile" target="_blank">Linkedin</a></span>
-<span class="text"># <a class="link" href="https://twitter.com/yourhandle" target="_blank">Twitter</a></span>
-<span class="text"># <a class="link" href="https://facebook.com/yourprofile" target="_blank">Facebook</a></span>
-<span class="text"># <a class="link" href="https://instagram.com/yourhandle" target="_blank">Instagram</a></span>
-<span class="blank"></span>
-<span class="prompt">root@MoorthiSakthi:~$ </span><span class="cmd">exit</span><br>
-<span class="blank"></span>
-<span class="cursor"></span>
+<div id="terminal"></div>
+<span id="cursor"></span>
+
+<script>
+  const terminal = document.getElementById('terminal');
+  const cursor = document.getElementById('cursor');
+
+  const WORD_SPEED = 60;   // was 120 — 2x faster
+  const LINE_PAUSE = 250;  // was 500
+  const CMD_PAUSE  = 350;  // was 700
+
+  function words(str) {
+    return str.split(' ').map(w => ({ type: 'word', text: w }));
+  }
+
+  const script = [
+    { type: 'prompt', text: 'root@MoorthiSakthi:~$' },
+    { type: 'cmd',    text: 'cd' },
+    { type: 'cmd',    text: 'Portfolio' },
+    { type: 'newline' },
+    { type: 'pause', ms: 150 },
+
+    { type: 'prompt', text: 'root@MoorthiSakthi:~$' },
+    { type: 'cmd',    text: 'cat' },
+    { type: 'cmd',    text: 'about.txt' },
+    { type: 'newline' },
+    { type: 'pause', ms: 200 },
+
+    { type: 'blank' },
+
+    ...words("I'm Moorthi , I did my Bachelor's Degree in Bachelor of Science in Chemistry at"),
+    { type: 'newline' },
+    ...words('Bharathiyar University (Tiruppur , Tamilnadu , INDIA )'),
+    { type: 'newline' },
+
+    { type: 'blank' },
+
+    ...words("I'm currently pursuing my master degree in Master of Computer Applications at SRM"),
+    { type: 'newline' },
+    ...words('Institute of Science and Technology ( Chennai , Tamilnadu , INDIA )'),
+    { type: 'newline' },
+
+    { type: 'blank' },
+
+    ...words('Network Engineer with 5 years of experience in routing protocols, switching, and LAN technologies,'),
+    { type: 'newline' },
+    ...words('dedicated to designing and optimizing secure, scalable networks to drive operational efficiency'),
+    { type: 'newline' },
+    ...words('and support business goals.'),
+    { type: 'newline' },
+
+    { type: 'blank' },
+
+    ...words("Here's my"),
+    { type: 'link', text: 'Resume', href: '#', target: '_self' },
+    ...words(', if you wanna Hire me.'),
+    { type: 'newline' },
+    { type: 'blank' },
+    { type: 'pause', ms: 150 },
+
+    { type: 'prompt', text: 'root@MoorthiSakthi:~$' },
+    { type: 'cmd',    text: 'cat' },
+    { type: 'cmd',    text: 'contact.txt' },
+    { type: 'newline' },
+    { type: 'pause', ms: 200 },
+
+    { type: 'blank' },
+
+    ...words('Feel free to reach me at'),
+    { type: 'link', text: 'mmoorthi304@gmail.com', href: 'mailto:mmoorthi304@gmail.com', target: '_self' },
+    { type: 'newline' },
+
+    { type: 'blank' },
+
+    ...words('My other social media handles include'),
+    { type: 'newline' },
+
+    { type: 'word', text: '#' },
+    { type: 'link', text: 'Linkedin',  href: 'https://linkedin.com/in/yourprofile', target: '_blank' },
+    { type: 'newline' },
+
+    { type: 'word', text: '#' },
+    { type: 'link', text: 'Twitter',   href: 'https://twitter.com/yourhandle',      target: '_blank' },
+    { type: 'newline' },
+
+    { type: 'word', text: '#' },
+    { type: 'link', text: 'Facebook',  href: 'https://facebook.com/yourprofile',    target: '_blank' },
+    { type: 'newline' },
+
+    { type: 'word', text: '#' },
+    { type: 'link', text: 'Instagram', href: 'https://instagram.com/yourhandle',    target: '_blank' },
+    { type: 'newline' },
+
+    { type: 'blank' },
+    { type: 'pause', ms: 150 },
+
+    { type: 'prompt', text: 'root@MoorthiSakthi:~$' },
+    { type: 'cmd',    text: 'exit' },
+    { type: 'newline' },
+    { type: 'blank' },
+  ];
+
+  let currentLine = document.createElement('span');
+  terminal.appendChild(currentLine);
+
+  function appendToLine(html) {
+    const span = document.createElement('span');
+    span.innerHTML = html;
+    currentLine.appendChild(span);
+  }
+
+  function newLine() {
+    terminal.appendChild(document.createElement('br'));
+    currentLine = document.createElement('span');
+    terminal.appendChild(currentLine);
+  }
+
+  let idx = 0;
+
+  function next() {
+    if (idx >= script.length) {
+      cursor.classList.add('show');
+      return;
+    }
+
+    const token = script[idx++];
+
+    if (token.type === 'pause') {
+      setTimeout(next, token.ms);
+      return;
+    }
+    if (token.type === 'blank') {
+      terminal.appendChild(document.createElement('br'));
+      currentLine = document.createElement('span');
+      terminal.appendChild(currentLine);
+      setTimeout(next, 40);
+      return;
+    }
+    if (token.type === 'newline') {
+      newLine();
+      setTimeout(next, 40);
+      return;
+    }
+    if (token.type === 'prompt') {
+      appendToLine(`<span class="prompt">${token.text} </span>`);
+      setTimeout(next, WORD_SPEED);
+      return;
+    }
+    if (token.type === 'cmd') {
+      appendToLine(`${token.text} `);
+      setTimeout(next, WORD_SPEED);
+      return;
+    }
+    if (token.type === 'word') {
+      appendToLine(`${token.text} `);
+      setTimeout(next, WORD_SPEED);
+      return;
+    }
+    if (token.type === 'link') {
+      const tgt = token.target === '_blank' ? "target='_blank'" : '';
+      appendToLine(`<a class='link' href='${token.href}' ${tgt}>${token.text}</a> `);
+      setTimeout(next, WORD_SPEED);
+      return;
+    }
+
+    next();
+  }
+
+  setTimeout(next, 400);
+</script>
 
 </body>
 </html>
