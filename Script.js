@@ -1,6 +1,7 @@
 const output = document.getElementById("output");
 const input = document.getElementById("commandInput");
 
+/* YOUR DATA */
 const files = {
   "about.txt": `I'm Moorthi , I did my Bachelor's Degree in Bacholor of Science in Chemistry at Bharathiyar University (Tiruppur ,Tamilnadu , INDIA )
 
@@ -20,16 +21,7 @@ My other social media handles include
 # Instagram`
 };
 
-input.addEventListener("keydown", function (e) {
-  if (e.key === "Enter") {
-    const command = input.value.trim();
-    print(`root@MoorthiSakthi:~$ ${command}`);
-
-    handleCommand(command);
-    input.value = "";
-  }
-});
-
+/* PRINT FUNCTION */
 function print(text) {
   const div = document.createElement("div");
   div.textContent = text;
@@ -37,6 +29,7 @@ function print(text) {
   window.scrollTo(0, document.body.scrollHeight);
 }
 
+/* COMMAND HANDLER */
 function handleCommand(cmd) {
   if (cmd === "ls") {
     print("about.txt contact.txt");
@@ -54,8 +47,39 @@ function handleCommand(cmd) {
   } 
   else if (cmd === "exit") {
     print("logout");
-  }
+  } 
   else {
     print("Command not found");
   }
 }
+
+/* INPUT EVENT */
+input.addEventListener("keydown", function (e) {
+  if (e.key === "Enter") {
+    const command = input.value.trim();
+    print(`root@MoorthiSakthi:~$ ${command}`);
+    handleCommand(command);
+    input.value = "";
+  }
+});
+
+/* AUTO START COMMANDS (LIKE SCREENSHOT 🔥) */
+const startupCommands = [
+  "cd Portfolio",
+  "cat about.txt",
+  "cat contact.txt"
+];
+
+let i = 0;
+
+function runStartup() {
+  if (i < startupCommands.length) {
+    const cmd = startupCommands[i];
+    print(`root@MoorthiSakthi:~$ ${cmd}`);
+    handleCommand(cmd);
+    i++;
+    setTimeout(runStartup, 800);
+  }
+}
+
+runStartup();
