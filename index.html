@@ -94,12 +94,17 @@
 
     { type: 'blank' },
 
-    ...words("Here's my"),
-    { type: 'link', text: 'Resume', href: '#', target: '_self' },
-    ...words(', if you wanna Hire me.'),
-    { type: 'newline' },
-    { type: 'blank' },
-    { type: 'pause', ms: 150 },
+...words("Here's my"),
+{ 
+  type: 'link', 
+  text: 'Resume', 
+  href: 'https://drive.google.com/file/d/1LZLACpmFGMRqgQrc3Ba-0n9FuorRR4ZT/view?usp=drivesdk, 
+  target: '_blank'   // opens in new tab (recommended)
+},
+...words(', if you wanna hire me.'),
+{ type: 'newline' },
+{ type: 'blank' },
+{ type: 'pause', ms: 150 },
 
     { type: 'prompt', text: 'root@MoorthiSakthi:~$' },
     { type: 'cmd',    text: 'cat' },
